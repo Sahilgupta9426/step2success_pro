@@ -93,6 +93,10 @@ def pdftotext(file):
     
     
     if text:
+        name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+",text)
+        print(name.group())
+        if name:
+            testdata['name']=name.group()
         # in order to get date
         for l1 in list1:
             # print(l1)
@@ -217,6 +221,9 @@ def imgtotxt(file):
     
     
     if text:
+        name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+",text)
+        if name:
+            testdata['name']=name.group()
         # in order to get date
         for l1 in list1:
             # print(l1)
@@ -254,8 +261,8 @@ if __name__ == "__main__":
     # file=fitz.open('share_preview2.pdf')
     # file=fitz.open('c676422960523ad28beb131038335370.pdf')
     # file=fitz.open('lalitaimg.pdf')
-    # file=fitz.open('lalita.pdf')
-    file=fitz.open('imagetest.pdf')
+    file=fitz.open('lalita.pdf')
+    # file=fitz.open('imagetest.pdf')
     a=pdftotext(file)
     print(a)
     if not a:
