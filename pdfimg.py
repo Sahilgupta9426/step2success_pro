@@ -8,7 +8,7 @@ import numpy as np
 list1=[] #get data only from list 1
 testdata={}#for Patient test details in pair of key and value
 # for test by default value
-testdata={'cbc':False,'urine':False,'hba1c':False,'lft':False,'kft':False,'iron_study':False,'lipid':False,'thyroid_profile':False,'date':''}
+testdata={'cbc':False,'urine':False,'hba1c':False,'lft':False,'kft':False,'iron_study':False,'lipid':False,'thyroid_profile':False,'date':'','name':''}
 # end test by default value
 list2=[] # to get final testdata of dictionery in list2
 
@@ -93,7 +93,7 @@ def pdftotext(file):
     
     
     if text:
-        name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+",text)
+        name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",text)
         print(name.group())
         if name:
             testdata['name']=name.group()
@@ -221,7 +221,7 @@ def imgtotxt(file):
     
     
     if text:
-        name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+",text)
+        name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",text)
         if name:
             testdata['name']=name.group()
         # in order to get date
@@ -259,9 +259,9 @@ def imgtotxt(file):
 if __name__ == "__main__":
     start_time = time.time()
     # file=fitz.open('share_preview2.pdf')
-    # file=fitz.open('c676422960523ad28beb131038335370.pdf')
-    # file=fitz.open('lalitaimg.pdf')
-    file=fitz.open('lalita.pdf')
+    file=fitz.open('c676422960523ad28beb131038335370.pdf')
+    
+    # file=fitz.open('lalita.pdf')
     # file=fitz.open('imagetest.pdf')
     a=pdftotext(file)
     print(a)
