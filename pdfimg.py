@@ -217,18 +217,20 @@ def imgtotxt(file):
     
     
     if text:
-        name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",text)
+        name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",text)# get name
         if name:
-            testdata['name']=name.group()
+            testdata['name']=name.group() #it will save the name if it is true
         # in order to get date
         for l1 in list1:
             # print(l1)
             l1=l1
-        yy = re.search(r"[\d]{1,2}/[\d]{1,2}/[\d]{2,4}", l1)
-        y_y = re.search(r"[\d]{1,2}-[\d]{1,2}-[\d]{2,4}", l1)
-        mmm = re.search(r"[\d]{2} [a-zA-Z]{3} [\d]{2,4}", l1)
-        m_m_m = re.search(r"[\d]{2}-[a-zA-Z]{3}-[\d]{2,4}", l1)
+        yy = re.search(r"[\d]{1,2}/[\d]{1,2}/[\d]{2,4}", l1)# get date which has slash sign
+        y_y = re.search(r"[\d]{1,2}-[\d]{1,2}-[\d]{2,4}", l1)#get date which has hyphen sign
+        mmm = re.search(r"[\d]{2} [a-zA-Z]{3,8} [\d]{2,4}", l1)# get  date which has alphabetical months with space
+        m_m_m = re.search(r"[\d]{2}-[a-zA-Z]{3}-[\d]{2,4}", l1) # get date which has hyphen and alphabetical months 
         # print(yy.group(),y_y.group(),mmm.group(),m_m_m.group())
+        
+        # check which date is true and save
         if yy:
             
             testdata['date']=yy.group()
@@ -243,9 +245,10 @@ def imgtotxt(file):
             
             
             testdata['date']=m_m_m.group()
+        # end check date
         
     else:
-        print('something is wrong with')
+        print('something is wrong ')
                 
     # print(text)
     return list2[-1]
@@ -259,12 +262,14 @@ if __name__ == "__main__":
     
     # file=fitz.open('lalita.pdf')
     file=fitz.open('imagetest.pdf')
-    a=pdftotext(file)
-    print(a)
-    if not a:
-        b=imgtotxt(file)
-        print(b)
-        if not b:
+    # file wil go in pdftotext
+    p2t_value=pdftotext(file)# get value from pdftotext.either it will have text or empty value
+    print(p2t_value)
+    
+    if not p2t_value:# it will send imgtotxt function, if pdftotext do not get value
+        img2t_value=imgtotxt(file)#get text from imgtotxt
+        print(img2t_value)
+        if not img2t_value:# if img2t_value also get empty it will show no 'no data in pdf'
             print('no data in pdf')
 
 print("--- %s seconds ---" % (time.time() - start_time))
