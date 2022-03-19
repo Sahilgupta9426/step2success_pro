@@ -259,9 +259,9 @@ def imgtotxt(file):
 if __name__ == "__main__":
     start_time = time.time()
     # file=fitz.open('share_preview2.pdf')
-    file=fitz.open('c676422960523ad28beb131038335370.pdf')
+    # file=fitz.open('c676422960523ad28beb131038335370.pdf')
     
-    # file=fitz.open('lalita.pdf')
+    file=fitz.open('lalita.pdf')
     # file=fitz.open('imagetest.pdf')
     a=pdftotext(file)
     print(a)
