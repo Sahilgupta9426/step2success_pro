@@ -8,7 +8,7 @@ import numpy as np
 list1=[] #get data only from list 1
 testdata={}#for Patient test details in pair of key and value
 # for test by default value
-testdata={'cbc':False,'urine':False,'hba1c':False,'lft':False,'kft':False,'iron_study':False,'lipid':False,'thyroid_profile':False,'date':'','name':''}
+testdata={'cbc':False,'urine':False,'lft':False,'kft':False,'iron_study':False,'lipid':False,'thyroid_profile':False,'date':'','name':''}
 # end test by default value
 list2=[] # to get final testdata of dictionery in list2
 
@@ -42,9 +42,7 @@ def pdftotext(file):
             #end urine test
 
             #for Haemoglobin test
-            if 'hba1c' in text or 'glycosylated haemoglobin' in text or 'glycated haemoglobin'  in text:
-                print('the HbA1c value True')
-                testdata['hba1c']=True
+            
             
             #end Haemoglobin test
 
@@ -170,9 +168,7 @@ def imgtotxt(file):
                 #end urine test
 
                 #for Haemoglobin test
-                if 'hba1c' in text or 'glycosylated haemoglobin' in text or 'glycated haemoglobin'  in text:
-                    print('the HbA1c value True')
-                    testdata['hba1c']=True
+                
                 
                 #end Haemoglobin test
 
@@ -261,8 +257,8 @@ if __name__ == "__main__":
     # file=fitz.open('share_preview2.pdf')
     # file=fitz.open('c676422960523ad28beb131038335370.pdf')
     
-    file=fitz.open('lalita.pdf')
-    # file=fitz.open('imagetest.pdf')
+    # file=fitz.open('lalita.pdf')
+    file=fitz.open('imagetest.pdf')
     a=pdftotext(file)
     print(a)
     if not a:
