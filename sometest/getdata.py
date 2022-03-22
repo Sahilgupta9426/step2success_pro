@@ -18,7 +18,7 @@ import boto3
 
 def detect_text(photo, ):
     image=open(photo,'rb')
-    client = boto3.client('rekognition',aws_access_key_id="AKIAUW2ODFNIMRNUGSX2",aws_secret_access_key="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",region_name='ap-south-1')
+    client = boto3.client('rekognition',aws_access_key_id="AKIAUW2ODFNIMRNUGSX23",aws_secret_access_key="3Wtf0x7LuB+0+4wxYNj1mjsWQDJec+YMre7MPcGu2",region_name='ap-south-1')
 
     response=client.detect_text(Image={'Bytes': image.read()})
                         

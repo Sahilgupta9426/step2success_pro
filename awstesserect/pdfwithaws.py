@@ -151,6 +151,7 @@ def test(text):
             
             # end test
         
+        
     else:
         
         print('empty data or something wrong')
@@ -180,15 +181,15 @@ def test(text):
         list1.append(date)
     elif y_y:
             
-        date=yy.group()
+        date=y_y.group()
         list1.append(date)     
     elif mmm:
             
-        date=yy.group()
+        date=mmm.group()
         list1.append(date)
                 
     elif m_m_m:
-        date=yy.group()
+        date=m_m_m.group()
         list1.append(date)
     elif slash_date:
         date=slash_date.group()
@@ -226,6 +227,8 @@ def fromimage(documentName):
             # res.append(a)
             # print(a) 
     return a
+
+
 
 if __name__ == "__main__":
     start_time = time.time()
