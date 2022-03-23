@@ -1,9 +1,10 @@
+from typing import List
 import fitz
-import pandas as pd 
+# import pandas as pd 
 import re
 from PIL import Image
 # import pytesseract
-import numpy as np
+# import numpy as np
 import boto3
 
 imagetext=[]
@@ -56,7 +57,7 @@ def gettext(file):
                 # text = pytesseract.image_to_string(img1)
             text=text.lower()
             text=text
-            print(text)
+            # print(text)
             imagetext.append(text)
                 # print(text)
         text2=page.get_text()
@@ -80,8 +81,10 @@ def gettest():
 
             return a.group()
 
-    test_name=['cbc','lft','kft','sahil','iron study','thyroid profile','lipid','hba1c']
+    test_name=['cbc','lft','kft','iron study','sahil','abhay','thyroid profile','lipid','hba1c']
     datas=list(map(search,test_name))
+    # datas=datas.remove(None)
+    print(datas)
 
     # find name and date
     name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",list1)
@@ -125,8 +128,8 @@ def gettest():
     return datas,namedate
 
 if __name__=="__main__":
-    file=fitz.open('jyoti.pdf')
-    # file=fitz.open('lalita.pdf')
+    # file=fitz.open('jyoti.pdf')
+    file=fitz.open('lalita.pdf')
     gettext(file)
     if gettext:
         print(gettest())
