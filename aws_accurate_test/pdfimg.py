@@ -8,9 +8,7 @@ import boto3
 
 list1=[] #get data only from list 1
 
-# for test by default value
-# testdata={'cbc':False,'urine':False,'lft':False,'kft':False,'iron_study':False,'lipid':False,'thyroid_profile':False,'date':'','name':''}
-# end test by default value
+
 list2=[] # to get final testdata of dictionery in list2
 
 
@@ -52,7 +50,7 @@ def pdftotext(file):
         alltext+=text
     print(alltext)
     ret=test(alltext)
-    print(ret)
+    # print(ret)
         
     if not list1:
         print('list1',list1)
@@ -97,108 +95,25 @@ def imgtotxt(file):
         return ret
 
 def test(alltext):
-    print(alltext)
+    
     text=alltext
-    def search(n):
-        # print(n)
-        a=re.search(n,text)
-
-        # print(a)
-        if a!=None:
-
-            return a.group()
-
-    test_name=['cbc','lft','kft','iron study','thyroid profile','lipid','hba1c']
+    def search(test_name):
+        
+        childlist=[]
+        
+        # print(test_name)
+        for n_list2 in test_name:
+            a=re.search(n_list2,text)
+            if a!=None:
+                childlist.append(a.group())
+        
+        return childlist
+    # test_name=['cbc','lft','kft','iron study','thyroid profile','lipid','hba1c']
+    test_name=[['cbc','haemoglobin','rbc count'],['lft','bilirubin','sgot','sgpt'],['kft','bun','blood urea'],['complete haemogram','tlc','pcv','rbc','mcv','mch','mchc'],
+    ['absolute leucocyte count','absolue Neutrophil count','absolute monocyte count','absolute basophil count','absolute eosinphil count'],
+    ['thyroid profile','t3','t4','tsh'],['iron study','iron studies','uibc','tibc']]
     datas=list(map(search,test_name))
-
-        # print(text)
-            
-        # print('empty text1',text)
-        
-            
-            # get test
-        #for cbc test
-    # if 'cbc' in text or 'complete blood count'  in text:
-                
-    #     print('the cbc value True')
-    #         # testdata['cbc']=True
-    #     list2.append('cbc')
-
-            
-    #         #end cbc test
-            
-    #         #for urine test
-
-    # if 'urine' in text: 
-    #     print('the urine value True')
-    #         # testdata['urine']=True
-    #     list2.append('urine')
-            
-    #         #end urine test
-
-    #         #for Haemoglobin test
-    # if 'hba1c' in text or 'glycated hemoglobin'  in text:
-                
-    #     print('the lft value True')
-    #     # testdata['lft']=True
-    #     list2.append('hba1c')
-            
-    #     #end Haemoglobin test
-    #     # bllod sugar
-    # if 'blood sugar' in text:
-    #     list2.append('blood_sugar')
-    #     #end blood sugar
-    #     # absolute leucocyte count
-    # if 'absolute leucocyte count' in text:
-    #     list2.append('alc')
-    #     #absolute leucocyte count 
-    #         #for LFT test
-    # if 'liver function test' in text or 'lft'  in text:
-                
-    #     print('the lft value True')
-    #         # testdata['lft']=True
-    #     list2.append('lft')
-            
-    #         #end LFT test
-            
-    #         #for KFT test
-    # if 'kidney function test' in text or 'renal function test' in text or 'kft' in text or 'rft' in text:
-                
-    #     print('the kft value True')
-    #         # testdata['kft']=True
-    #     list2.append('kft')
-            
-    #         #end KFT test
-            
-    #         #for Iron  test
-    # if 'iron studies' in text or 'iron study' in text:
-    #     list2.append('iron_study')    
-    #     print('the Iron value True')
-    #         # testdata['iron_study']=True
-
-            
-    #         #end Iron test
-            
-    #         #for Lipid test
-    # if 'lipid' in text:
-                
-    #     print('the lipid value True')
-    #         # testdata['lipid']=True
-    #     list2.append('lipid')
-            
-    #         #end Lipid test
-            
-    # if 'thyroid profile' in text:
-                
-    #     # testdata['thyroid_profile']=True
-    #     list2.append('thyroid profile')
-
-            
-    #         # end test
-        
-    # else:
-        
-    #     print('empty data or something wrong')
+    
     
     
     
@@ -251,8 +166,8 @@ if __name__ == "__main__":
     # file=fitz.open('c676422960523ad28beb131038335370.pdf')
     
     # file=fitz.open('lalita.pdf')
-    # file=fitz.open('prem.pdf')
-    file=fitz.open('imagetest.pdf')
+    file=fitz.open('prem.pdf')
+    # file=fitz.open('imagetest.pdf')
     # file=fitz.open('jyoti.pdf')
     # file wil go in pdftotext
     p2t_value=pdftotext(file)# get value from pdftotext.either it will have text or empty value

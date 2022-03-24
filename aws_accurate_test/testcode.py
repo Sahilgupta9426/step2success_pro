@@ -69,22 +69,46 @@ def gettext(file):
 
 def gettest():
     namedate=[]
-    list1=textfile+imagetext
-    list1=' '.join(list1)
+    list1=' '.join(imagetext)
+    # print('list--1---------------',list1)
+    list2=' '.join(textfile)
+    print('list2________',list2)
+    list1=list1+list2
+
+    
     print(list1)
-    def search(n):
-        # print(n)
-        a=re.search(n,list1)
+    # def search(n):
+    #     # print(n)
+    #     a=re.search(n,list1)
 
-        # print(a)
-        if a!=None:
+    #     # print(a)
+    #     if a!=None:
 
-            return a.group()
+    #         return a.group()
 
-    test_name=['cbc','lft','kft','iron study','thyroid profile','lipid','hba1c','know all about your health']
+    # test_name=['cbc','lft','kft','iron study','thyroid profile','lipid','hba1c','know all about your health']
+    # datas=list(map(search,test_name))
+
+    def search(test_name):
+        
+        childlist=[]
+        print(test_name)
+        
+        for n_list2 in test_name:
+            a=re.search(n_list2,list1)
+            if a!=None:
+                childlist.append(a.group())
+        
+        return childlist
+    # test_name=['cbc','lft','kft','iron study','thyroid profile','lipid','hba1c']
+    test_name=[['cbc','haemoglobin','rbc count'],['lft','bilirubin','sgot','sgpt'],['kft','bun','blood urea'],['complete haemogram','tlc','pcv','rbc','mcv','mch','mchc'],
+    ['absolute leucocyte count','absolue Neutrophil count','absolute monocyte count','absolute basophil count','absolute eosinphil count'],
+    ['thyroid profile','t3','t4','tsh'],['iron study','iron studies','uibc','tibc']]
     datas=list(map(search,test_name))
+
+
     # datas=datas.remove(None)
-    print(datas)
+    # print(datas)
 
     # find name and date
     name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",list1)
@@ -128,8 +152,9 @@ def gettest():
     return datas,namedate
 
 if __name__=="__main__":
-    file=fitz.open('jyoti.pdf')
+    # file=fitz.open('jyoti.pdf')
     # file=fitz.open('lalita.pdf')
+    file=fitz.open('imagetest.pdf')
     gettext(file)
     if gettext:
         print(gettest())
