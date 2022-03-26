@@ -1,10 +1,12 @@
 import fitz
 import re
 import time
-from PIL import Image
-import pytesseract
-import numpy as np
+# from PIL import Image
+# import pytesseract
+# import numpy as np
 import boto3
+
+
 
 list1=[] #get data only from list 1
 
@@ -48,15 +50,18 @@ def pdftotext(file):
         text1=page.get_text()
         text=text1.lower()
         alltext+=text
+    
     print(alltext)
-    ret=test(alltext)
+    
+    get_date_name=get_name_date(alltext)
     # print(ret)
-        
+    
+    testnames=gettest(alltext)
     if not list1:
         print('list1',list1)
         return ''
     else:   
-        return ret
+        return get_date_name,testnames
 
 
 def imgtotxt(file):
@@ -88,35 +93,18 @@ def imgtotxt(file):
             
     alltext+=alltext2
     print(alltext)
-    ret=test(alltext)
+    get_date_name=get_name_date(alltext)
+    print(get_date_name)
+    
+    test_names=gettest(alltext)
     if not list1 and not list2:
         return ''
     else:
-        return ret
+        return get_date_name,test_names
 
-def test(alltext):
-    
+def get_name_date(alltext):
     text=alltext
-    def search(test_name):
-        
-        childlist=[]
-        
-        # print(test_name)
-        for n_list2 in test_name:
-            a=re.search(n_list2,text)
-            if a!=None:
-                childlist.append(a.group())
-        
-        return childlist
-    # test_name=['cbc','lft','kft','iron study','thyroid profile','lipid','hba1c']
-    test_name=[['cbc','haemoglobin','rbc count'],['lft','bilirubin','sgot','sgpt'],['kft','bun','blood urea'],['complete haemogram','tlc','pcv','rbc','mcv','mch','mchc'],
-    ['absolute leucocyte count','absolue Neutrophil count','absolute monocyte count','absolute basophil count','absolute eosinphil count'],
-    ['thyroid profile','t3','t4','tsh'],['iron study','iron studies','uibc','tibc']]
-    datas=list(map(search,test_name))
-    
-    
-    
-    
+ 
     name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",text)
     
     # p_name=re.compile(r'patient name\s*:\s*(.*)')
@@ -156,8 +144,54 @@ def test(alltext):
     
 
     
-    return list1,datas
+    return list1
 
+def gettest(text):
+    
+        
+    def sub_search(test_name):
+        # print(test_name)
+        a=re.search(test_name,text)
+        if a!=None:
+
+            return a.group()
+    test_name=['cbc','lft','kft','iron study','thyroid profile','lipid','hba1c']
+    
+    datas=list(map(sub_search,test_name))#for search function
+
+
+
+    # get test value
+    
+    test_name=[['haemoglobin (hb)','rbc count.','platelet count','meditest full body checkup panel','tlc (total leucocyte count)'],
+    ['liver function test','lft','bilirubin, total','sgot','sgpt']]
+    
+    dictdata={}
+    def test_value(datas):
+        def sub_test_value(datas):
+            
+            # a=re.compile(fr'{datas} ^\d*[.,]?\d*$ ')
+            
+            
+            # a=re.compile(rf'{datas}\s*\n\d*[0-9]*[.,]?[0-9]*')
+            a=re.compile(rf'{datas}\s*\n\s*[a-zA-Z]?\d*[0-9]*[.,]?[0-9]*')
+
+
+            a=a.search(text)
+            print('print datas value',a,'end datas value')
+            # a=a.search(text)
+            if a!=None:
+                # print(a.group())
+                return a.group() 
+        subtestvalue=list(map(sub_test_value,datas))
+        return subtestvalue
+
+
+
+    testvalue=list(map(test_value,test_name))
+    # print('test_value',testvalue)
+    # end test value
+    return datas, testvalue
 
 
 if __name__ == "__main__":
@@ -165,8 +199,8 @@ if __name__ == "__main__":
     # file=fitz.open('share_preview2.pdf')
     # file=fitz.open('c676422960523ad28beb131038335370.pdf')
     
-    # file=fitz.open('lalita.pdf')
-    file=fitz.open('prem.pdf')
+    file=fitz.open('lalita.pdf')
+    # file=fitz.open('prem.pdf')
     # file=fitz.open('imagetest.pdf')
     # file=fitz.open('jyoti.pdf')
     # file wil go in pdftotext
