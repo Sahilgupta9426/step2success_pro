@@ -44,26 +44,25 @@ list2=[] # to get final testdata of dictionery in list2
 
 
 def pdftotext(file):
+    
     alltext=''
     file=file
     for pageNumber,page in enumerate(file.pages(),start=1):
         text1=page.get_text()
         text=text1.lower()
         alltext+=text
-    
-    print(alltext)
-    
-    get_date_name=get_name_date(alltext)
-    # print(ret)
-    
-    testnames=gettest(alltext)
-    if not list1:
-        print('list1',list1)
+    date_get=get_date(alltext)
+    print(date_get)
+    name=get_name(alltext)
+    print(name)
+    nametotext=name_to_all_text(name,alltext)
+
+    testresult=gettest(nametotext)
+    if name and date_get:
+        return name,date_get,testresult
+    else:
         return ''
-    else:   
-        return get_date_name,testnames
-
-
+        
 def imgtotxt(file):
     alltext=''
     alltext2=''
@@ -95,30 +94,33 @@ def imgtotxt(file):
             alltext2+=text
             
     alltext+=alltext2
-    print(alltext)
-    get_date_name=get_name_date(alltext)
-    # print(get_date_name)
+    print('__________________________',alltext)
+    # print(alltext)
+    date_get=get_date(alltext)
+    print(date_get)
+    name=get_name(alltext)# it get name to end of report details
+    print(name)
+    nametotext=name_to_all_text(name,alltext)
     
-    test_names=gettest(alltext)
-    if not list1 and not list2:
-        return ''
-    else:
-        return get_date_name,test_names
+    testresult=gettest(nametotext)
+    return name,date_get,testresult
 
-def get_name_date(alltext):
+def name_to_all_text(name,alltext):
+    endofreport=re.search(r'end of report',alltext)
+    if endofreport:
+        nametoend=re.compile(rf'({name})(.*?|\n)*(end of report)')
+        nametoend=nametoend.search(alltext)
+        print(nametoend)
+        
+        return nametoend.group()
+    elif alltext:
+        return alltext
+    return ''
+
+def get_date(alltext):
     text=alltext
  
-    name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",text)
     
-    # p_name=re.compile(r'patient name\s*:\s*(.*)')
-    p_name=re.compile(r'patient name\s*:\s*[a-zA-Z]+ [a-zA-Z]+')
-    
-    p_name= p_name.search(text)
-    if name:
-        # testdata['name']=name.group()
-        list1.append(name.group())
-    elif p_name:
-        list1.append(p_name.group())
             
     yy = re.search(r"[\d]{1,2}/[\d]{1,2}/[\d]{2,4}", text)
     y_y = re.search(r"[\d]{1,2}-[\d]{1,2}-[\d]{2,4}", text)
@@ -128,34 +130,45 @@ def get_name_date(alltext):
     if yy:
             
         date=yy.group()
-        list1.append(date)
+        return date
     elif y_y:
             
         date=y_y.group()
-        list1.append(date)     
+        return date   
     elif mmm:
             
         date=mmm.group()
-        list1.append(date)
+        return date
                 
     elif m_m_m:
         date=m_m_m.group()
-        list1.append(date)
+        return date
     elif slash_date:
         date=slash_date.group()
-        list1.append(date)
-    
+        return date
+    return ''
 
+def get_name(text):
+    name=re.search(r"(?:mr\.|mrs\.|ms\.) [a-zA-Z]+ [a-zA-Z]+",text)
     
-    return list1
+    # p_name=re.compile(r'patient name\s*:\s*(.*)')
+    p_name=re.compile(r'patient name\s*:\s*[a-zA-Z]+ [a-zA-Z]+')
+    
+    p_name= p_name.search(text)
+    if name:
+        
+        
+        return name.group()
+    elif p_name:
+        
+        return p_name.group()
+    return ''
 
 def gettest(text):
-    
-        
     def sub_search(test_name):
         # print(test_name)
         a=re.search(test_name,text)
-        if a!=None:
+        if a is not None:
 
             return a.group()
     test_name=['cbc','lft','kft','iron study','thyroid profile','lipid','hba1c']
@@ -187,7 +200,7 @@ def gettest(text):
             t_value1=t_value1.search(text)
             
            
-            if t_value1!=None:
+            if t_value1 is not None:
                 print(t_value1.group())
                 return t_value1.group() 
                 
@@ -209,9 +222,9 @@ if __name__ == "__main__":
     # file=fitz.open('c676422960523ad28beb131038335370.pdf')
     
     # file=fitz.open('lalita.pdf')
-    # file=fitz.open('prem.pdf')
+    file=fitz.open('prem.pdf')
     # file=fitz.open('imagetest.pdf')
-    file=fitz.open('jyoti.pdf')
+    # file=fitz.open('jyoti.pdf')
     # file wil go in pdftotext
     p2t_value=pdftotext(file)# get value from pdftotext.either it will have text or empty value
     print('pdftotext',p2t_value)
