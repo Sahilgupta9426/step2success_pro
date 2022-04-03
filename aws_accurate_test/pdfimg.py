@@ -4,7 +4,7 @@ import time
 from PIL import Image
 import pytesseract
 import numpy as np
-import boto3
+# import boto3
 
 
 
@@ -44,7 +44,6 @@ list2=[] # to get final testdata of dictionery in list2
 
 
 def pdftotext(file):
-    
     alltext=''
     file=file
     for pageNumber,page in enumerate(file.pages(),start=1):
@@ -54,11 +53,16 @@ def pdftotext(file):
     date_get=get_date(alltext)
     print(date_get)
     name=get_name(alltext)
-    print(name)
+    # print(name)
     nametotext=name_to_all_text(name,alltext)
-
-    testresult=gettest(nametotext)
-    if name and date_get:
+    if nametotext==1:
+        if  name and date_get:
+            testresult=gettest(alltext)
+            return name,date_get,testresult
+        return ''
+    
+    elif name and date_get:
+        testresult=gettest(nametotext)
         return name,date_get,testresult
     else:
         return ''
@@ -66,24 +70,15 @@ def pdftotext(file):
 def imgtotxt(file):
     alltext=''
     alltext2=''
-    
     file=file
-    
     for pageNumber,page in enumerate(file.pages(),start=1):
-
         for imgNumber,img in enumerate(page.get_images(),start=1):
             xref=img[0]
             pix=fitz.Pixmap(file,xref)
             if pix.n > 4:
                 pix=fitz.Pixmap(fitz.csRGB,pix)
-                
-                
-                
             pix.save(f'images/image_Page{pageNumber}_{imgNumber}.png')
-            
-            
             filename = f'images/image_Page{pageNumber}_{imgNumber}.png'
-            
             # documentName=filename
             # text=fromimage(documentName).
             # pytesrect
@@ -98,10 +93,14 @@ def imgtotxt(file):
     # print(alltext)
     date_get=get_date(alltext)
     print(date_get)
-    name=get_name(alltext)# it get name to end of report details
+    name=get_name(alltext)
     print(name)
-    nametotext=name_to_all_text(name,alltext)
-    
+    nametotext=name_to_all_text(name,alltext)#GET NAME TO END OF REPORT TEXTS
+    if nametotext==1:
+        if name and date_get:
+            testresult=gettest(alltext)
+            return name,date_get,testresult
+        return ''
     testresult=gettest(nametotext)
     return name,date_get,testresult
 
@@ -114,7 +113,7 @@ def name_to_all_text(name,alltext):
         
         return nametoend.group()
     elif alltext:
-        return alltext
+        return 1
     return ''
 
 def get_date(alltext):
@@ -221,9 +220,10 @@ if __name__ == "__main__":
     # file=fitz.open('share_preview2.pdf')
     # file=fitz.open('c676422960523ad28beb131038335370.pdf')
     
-    # file=fitz.open('lalita.pdf')
-    file=fitz.open('prem.pdf')
+    file=fitz.open('lalita.pdf')
+    # file=fitz.open('prem.pdf')
     # file=fitz.open('imagetest.pdf')
+    # file=fitz.open('ajax.pdf')
     # file=fitz.open('jyoti.pdf')
     # file wil go in pdftotext
     p2t_value=pdftotext(file)# get value from pdftotext.either it will have text or empty value
